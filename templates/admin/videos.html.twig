@@ -1,4 +1,6 @@
-<?php include('includes/_header.php'); ?>
+{% extends 'admin/admbase.html.twig' %}
+
+{% block mainAdmin %}
 
 <h2>Videos / My liked videos</h2>
 
@@ -37,7 +39,9 @@
     </tbody>
   </table>
 </div>
+{% endblock %}
 
+{% block customjs %}
 <script>
     function delete_video(e,video_id)
     {
@@ -50,5 +54,5 @@
         }
     }
 </script>
+{% endblock %}
 
-<?php include('includes/_footer.php'); ?>

@@ -1,4 +1,6 @@
-<?php include('includes/_header.php'); ?>
+{% extends 'admin/admbase.html.twig' %}
+
+{% block mainAdmin %}
  <h2>Users</h2>
 
     <div class="table-responsive">
@@ -26,4 +28,4 @@
         </table>
     </div>
 
-<?php include('includes/_footer.php'); ?>
+{% endblock %}
