@@ -1,0 +1,22 @@
+{
+  "name": "symfvideo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PZon/videoLibrary.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PZon/videoLibrary/issues"
+  },
+  "homepage": "https://github.com/PZon/videoLibrary#readme",
+  "devDependencies": {
+    "@symfony/webpack-encore": "^1.7.0"
+  }
+}
