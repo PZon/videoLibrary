@@ -15,15 +15,15 @@
             </tr>
         </thead>
         <tbody>
-        <?php foreach(range(1,10) as $v): ?>
+        {% for i in 1..7 %}
             <tr>
-            <td><?=$v?></td>
+            <td>{{i}}</td>
             <td>Adam</td>
             <td>Smith</td>
             <td>adam@smith.com</td>
             <td><a href="#" onclick="return confirm('Are you sure?');"><i class="fas fa-trash"></i></a></td>
             </tr>
-        <?php endforeach; ?>
+        {% endfor %}
         </tbody>
         </table>
     </div>
