@@ -1,0 +1,3 @@
+{% for cat in cats %}
+<a class="p-2 text-dark" href="{{path('videoList',{'catName':cat.name|lower|slugify , 'id':cat.id})}}">{{cat.name}}</a>
+{% endfor %}
