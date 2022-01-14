@@ -23,7 +23,10 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "3.0",
-        "symfony/maker-bundle": "1.9"
+        "symfony/debug-bundle": "4.1.*",
+        "symfony/maker-bundle": "1.9",
+        "symfony/stopwatch": "4.1.*",
+        "symfony/web-profiler-bundle": "4.1.*"
     },
     "config": {
         "preferred-install": {
