@@ -5,7 +5,8 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Category;
-//use App\Twig\AppExtension;
+use App\Utils\CatTreeFrontPage;
+
 
 class FrontController extends AbstractController
 {
@@ -20,8 +21,10 @@ class FrontController extends AbstractController
      /**
      * @Route("/videoList/cat/{catName},{id}", name="videoList")
      */
-    public function videoList()
+    public function videoList($id, CatTreeFrontPage $cats)
     {
+         $subCats=$cats->buidTree($id);
+         dump($subCats); //composer require symfony/var-dumper --dev
         return $this->render('front/videolist.html.twig');
     }
 
