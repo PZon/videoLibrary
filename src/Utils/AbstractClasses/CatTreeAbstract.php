@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 abstract class CatTreeAbstract{
 
 	protected static $dbConnection;
+	public $catList;
 	public $catArrayFromDB;
 		
 	public function __construct(EntityManagerInterface $em, UrlGeneratorInterface $urlGI){

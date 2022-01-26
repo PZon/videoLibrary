@@ -25,7 +25,7 @@ class FrontController extends AbstractController
     {
          $subCats=$cats->buidTree($id);
          dump($subCats); //composer require symfony/var-dumper --dev
-        return $this->render('front/videolist.html.twig');
+        return $this->render('front/videolist.html.twig', ['subCats'=>$cats->getCategoryList($subCats)]);
     }
 
     /**
