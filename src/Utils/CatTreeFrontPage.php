@@ -22,7 +22,7 @@ class CatTreeFrontPage extends CatTreeAbstract{
 				foreach($catArray as $val){
 					$catName = $this->slugger->slugify($val['name']);
 					$url= $this->urlGI->generate('videoList',['catName'=>$catName, 'id'=>$val['id']]);
-					$this->catList .= $this->html_2. $this->html_3 .$url . $this->html_4. $catName .$this->html_5 ;
+					$this->catList .= $this->html_2. $this->html_3 .$url . $this->html_4. $val['name'] .$this->html_5 ;
 					
 					if(!empty($val['children'])){
 						$this->getCategoryList($val['children']);
