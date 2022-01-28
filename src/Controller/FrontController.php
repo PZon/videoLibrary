@@ -23,9 +23,9 @@ class FrontController extends AbstractController
      */
     public function videoList($id, CatTreeFrontPage $cats)
     {
-         $subCats=$cats->buidTree($id);
-         dump($subCats); //composer require symfony/var-dumper --dev
-        return $this->render('front/videolist.html.twig', ['subCats'=>$cats->getCategoryList($subCats)]);
+        $cats->getCategoryListAndParent($id);
+         dump($cats); //composer require symfony/var-dumper --dev
+        return $this->render('front/videolist.html.twig', ['subCats'=>$cats]);
     }
 
     /**
