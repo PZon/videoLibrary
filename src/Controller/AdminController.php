@@ -8,6 +8,8 @@ use App\Utils\CatTreeAdminPage;
 use App\Utils\CatTreeAdminOptionList;
 use App\Entity\Category;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Form\CategoryType;
+use Symfony\Component\HttpFoundation\Request;
 
 
     /**
@@ -27,11 +29,20 @@ class AdminController extends AbstractController
     /**
      * @Route("/categories", name="categories")
      */
-    public function categories(CatTreeAdminPage $cats)
+    public function categories(CatTreeAdminPage $cats, Request $request)
     {
         $cats->getCategoryList($cats->buidTree());
         dump($cats);
-        return $this->render('admin/categories.html.twig', ['cats'=>$cats->catList]);
+        $cat = new Category();
+        $form=$this->createForm(CategoryType::class, $cat);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            //save cat
+            dd('valid');
+        }
+
+        return $this->render('admin/categories.html.twig', ['cats'=>$cats->catList, 'form'=>$form->createView()]);
     }
 
     /**
