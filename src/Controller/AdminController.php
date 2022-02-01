@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Utils\CatTreeAdminPage;
+use App\Utils\CatTreeAdminOptionList;
 use App\Entity\Category;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -74,5 +75,10 @@ class AdminController extends AbstractController
     public function users()
     {
         return $this->render('admin/users.html.twig');
+    }
+
+    public function getAllCategories(CatTreeAdminOptionList $cats){
+        $cats->getCategoryList($cats->buidTree());
+        return $this->render('admin/allCategories.html.twig', ['cats'=>$cats]);
     }
 }
