@@ -35,11 +35,11 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/editCategory", name="editCategory")
+     * @Route("/editCategory/{id}", name="editCategory")
      */
-    public function editCategory()
+    public function editCategory(Category $cat)
     {
-        return $this->render('admin/edit_category.html.twig');
+        return $this->render('admin/edit_category.html.twig',['cat'=>$cat]);
     }
 
     /**
@@ -77,8 +77,8 @@ class AdminController extends AbstractController
         return $this->render('admin/users.html.twig');
     }
 
-    public function getAllCategories(CatTreeAdminOptionList $cats){
+    public function getAllCategories(CatTreeAdminOptionList $cats, $editedCat = null){
         $cats->getCategoryList($cats->buidTree());
-        return $this->render('admin/allCategories.html.twig', ['cats'=>$cats]);
+        return $this->render('admin/allCategories.html.twig', ['cats'=>$cats, 'editedCat'=>$editedCat]);
     }
 }
