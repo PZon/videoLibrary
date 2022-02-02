@@ -35,14 +35,28 @@ class AdminController extends AbstractController
         dump($cats);
         $cat = new Category();
         $form=$this->createForm(CategoryType::class, $cat);
+        $isInvalid = null;
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
-            //save cat
-            dd('valid');
+            $cat->setName($request->request->get('category')['name']);
+
+            $repository=$this->getDoctrine()->getRepository(Category::class);
+            $parent=$repository->find($request->request->get('category')['parent']);
+            $cat->setParent($parent);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($cat);
+            $em->flush();
+            return $this->redirectToRoute('categories');
+
+        }elseif ($request->isMethod('post')) {
+           $isInvalid = ' is-invalid';
         }
 
-        return $this->render('admin/categories.html.twig', ['cats'=>$cats->catList, 'form'=>$form->createView()]);
+        return $this->render('admin/categories.html.twig', ['cats'=>$cats->catList,
+                                                            'form'=>$form->createView(),
+                                                            'isInvalid'=>$isInvalid]);
     }
 
     /**
