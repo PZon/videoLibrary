@@ -25,8 +25,12 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "3.0",
+        "phpunit/phpunit": "^9.5",
+        "symfony/browser-kit": "4.1.*",
+        "symfony/css-selector": "4.1.*",
         "symfony/debug-bundle": "4.1.*",
         "symfony/maker-bundle": "1.9",
+        "symfony/phpunit-bridge": "^6.0",
         "symfony/stopwatch": "4.1.*",
         "symfony/web-profiler-bundle": "4.1.*"
     },
