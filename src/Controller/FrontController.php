@@ -20,14 +20,14 @@ class FrontController extends AbstractController
     }
 
      /**
-     * @Route("/videoList/cat/{catName},{id}", name="videoList")
+     * @Route("/videoList/cat/{catName},{id}/{page}", defaults={"page":"1"}, name="videoList")
      */
-    public function videoList($id, CatTreeFrontPage $cats)
+    public function videoList($id, $page ,CatTreeFrontPage $cats)
     {
         $cats->getCategoryListAndParent($id);
         // dump($cats); //composer require symfony/var-dumper --dev
 
-        $videos = $this->getDoctrine()->getRepository(Videos::class)->findAll();
+        $videos = $this->getDoctrine()->getRepository(Videos::class)->findAllPaginated($page);
         return $this->render('front/videolist.html.twig', ['subCats'=>$cats, 'videos'=>$videos]);
     }
 
