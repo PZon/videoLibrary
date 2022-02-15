@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Category;
+use App\Entity\Videos;
 use App\Utils\CatTreeFrontPage;
 
 
@@ -24,8 +25,10 @@ class FrontController extends AbstractController
     public function videoList($id, CatTreeFrontPage $cats)
     {
         $cats->getCategoryListAndParent($id);
-         dump($cats); //composer require symfony/var-dumper --dev
-        return $this->render('front/videolist.html.twig', ['subCats'=>$cats]);
+        // dump($cats); //composer require symfony/var-dumper --dev
+
+        $videos = $this->getDoctrine()->getRepository(Videos::class)->findAll();
+        return $this->render('front/videolist.html.twig', ['subCats'=>$cats, 'videos'=>$videos]);
     }
 
     /**
