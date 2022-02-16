@@ -57,4 +57,16 @@ class CatTreeFrontPage extends CatTreeAbstract{
 		$catArray = $this->buidTree($parentData['id']);
 		return $this->getCategoryList($catArray);
 	}
+
+	public function getChildIds(int $parent): array{
+
+		static $ids = [];
+		foreach($this->catArrayFromDB as $val){
+			if($val['parent_id'] == $parent){
+				$ids[]=$val['id'].',';
+				$this->getChildIds($val['id']);
+			}
+		}
+		return $ids;
+	}
 }
