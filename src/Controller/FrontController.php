@@ -26,8 +26,10 @@ class FrontController extends AbstractController
     {
         $cats->getCategoryListAndParent($id);
         // dump($cats); //composer require symfony/var-dumper --dev
+        $ids = $cats->getChildIds($id);
+        array_push($ids, $id);
 
-        $videos = $this->getDoctrine()->getRepository(Videos::class)->findAllPaginated($page);
+        $videos = $this->getDoctrine()->getRepository(Videos::class)->findByChildIds($ids, $page);
         return $this->render('front/videolist.html.twig', ['subCats'=>$cats, 'videos'=>$videos]);
     }
 

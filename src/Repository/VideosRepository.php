@@ -21,8 +21,9 @@ class VideosRepository extends ServiceEntityRepository
         $this->paginator = $paginator;
     }
 
-    public function findAllPaginated($page){
-        $dbquery = $this->createQueryBuilder('v')->getQuery();
+    public function findByChildIds(array $val, int $page){
+        $dbquery = $this->createQueryBuilder('v')->andWhere('v.category IN (:val)')->setParameter('val', $val)->getQuery();
+
         $pagination = $this->paginator->paginate($dbquery, $page,5);
         return $pagination;
     }
