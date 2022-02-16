@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Category;
 use App\Entity\Videos;
 use App\Utils\CatTreeFrontPage;
-
+use Symfony\Component\HttpFoundation\Request;
 
 class FrontController extends AbstractController
 {
@@ -22,14 +22,14 @@ class FrontController extends AbstractController
      /**
      * @Route("/videoList/cat/{catName},{id}/{page}", defaults={"page":"1"}, name="videoList")
      */
-    public function videoList($id, $page ,CatTreeFrontPage $cats)
+    public function videoList($id, $page ,CatTreeFrontPage $cats, Request $request)
     {
         $cats->getCategoryListAndParent($id);
         // dump($cats); //composer require symfony/var-dumper --dev
         $ids = $cats->getChildIds($id);
         array_push($ids, $id);
 
-        $videos = $this->getDoctrine()->getRepository(Videos::class)->findByChildIds($ids, $page);
+        $videos = $this->getDoctrine()->getRepository(Videos::class)->findByChildIds($ids, $page, $request->get('sortby'));
         return $this->render('front/videolist.html.twig', ['subCats'=>$cats, 'videos'=>$videos]);
     }
 
