@@ -6,8 +6,8 @@ namespace App\Tests\Controllers;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use App\Entity\Category;
 
-class AdminControllerCategoriesTest extends WebTestCase
-//class AdminControllerCategoriesTest 
+//class AdminControllerCategoriesTest extends WebTestCase
+class AdminControllerCategoriesTest 
 {
 	public function setUp():void{
 		parent::set();
