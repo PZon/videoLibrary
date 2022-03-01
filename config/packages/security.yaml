@@ -16,6 +16,25 @@ security:
             security: false
         main:
             anonymous: true
+
+            #added by pzon
+            form_login:
+                check_path: login
+                login_path: login
+                csrf_token_generator: security.csrf.token_manager
+                default_target_path: adminPage
+                username_parameter: _email
+
+
+            logout:
+                path: logout
+                target: main_page
+
+            remember_me: 
+                secret: '%kernel.secret%'
+                lifetime: 604800 # 1 week in seconds
+                path: /
+
             #provider: users_in_memory
 
             # activate different ways to authenticate
