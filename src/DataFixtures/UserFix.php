@@ -35,9 +35,9 @@ class UserFix extends Fixture
     private function getUserData(): array{
         return [
 
-            ['John', 'Wayne', 'pz@pzon.eu', 'pass', 'hjd8dehdh', ['ROLE_ADMIN']],
-            ['John', 'Wayne2', 'pz2@pzon.eu', 'pass', null, ['ROLE_ADMIN']],
-            ['John', 'Doe', 'pz3@pzon.eu', 'pass', null, ['ROLE_USER']]
+            ['P', 'Zon', 'pz@pz.pz', 'pass', 'hjd8dehdh', ['ROLE_ADMIN']],
+            ['P2', 'PZ', 'pz2@pz.pz', 'pass', null, ['ROLE_ADMIN']],
+            ['U', 'User', 'user@pz.pz', 'pass', null, ['ROLE_USER']]
 
         ];
     }

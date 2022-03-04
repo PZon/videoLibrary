@@ -27,7 +27,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/categories", name="categories", methods={"GET", "POST"})
+     * @Route("/su/categories", name="categories", methods={"GET", "POST"})
      */
     public function categories(CatTreeAdminPage $cats, Request $request)
     {
@@ -49,7 +49,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/editCategory/{id}", name="editCategory", methods={"GET", "POST"})
+     * @Route("/su/editCategory/{id}", name="editCategory", methods={"GET", "POST"})
      */
     public function editCategory(Category $cat, Request $request)
     {
@@ -68,7 +68,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/deleteCategory/{id}", name="deleteCategory")
+     * @Route("/su/deleteCategory/{id}", name="deleteCategory")
      */
     public function deleteCategory(Category $cat)
     {
@@ -87,7 +87,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/uploadVideo", name="uploadVideo")
+     * @Route("/su/uploadVideo", name="uploadVideo")
      */
     public function uploadVideo()
     {
@@ -95,7 +95,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/users", name="users")
+     * @Route("/su/users", name="users")
      */
     public function users()
     {
@@ -103,6 +103,7 @@ class AdminController extends AbstractController
     }
 
     public function getAllCategories(CatTreeAdminOptionList $cats, $editedCat = null){
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $cats->getCategoryList($cats->buidTree());
         return $this->render('admin/allCategories.html.twig', ['cats'=>$cats, 'editedCat'=>$editedCat]);
     }
