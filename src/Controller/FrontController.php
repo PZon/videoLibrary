@@ -9,6 +9,10 @@ use App\Entity\Videos;
 use App\Utils\CatTreeFrontPage;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use App\Entity\User;
+use App\Form\UserType;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class FrontController extends AbstractController
 {
@@ -69,9 +73,31 @@ class FrontController extends AbstractController
     /**
      * @Route("/register", name="register")
      */
-    public function register()
+    public function register(Request $request, UserPasswordEncoderInterface $password_encoder)
     {
-        return $this->render('front/register.html.twig');
+        $user = new User;
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $em=$this->getDoctrine()->getManager();
+
+            $user->setName($request->request->get('user')['name']);
+            $user->setLastName($request->request->get('user')['last_name']);
+            $user->setEmail($request->request->get('user')['email']);
+            $password=$password_encoder->encodePassword($user,
+                $request->request->get('user')['password']['first']);
+            $user->setPassword($password);
+            $user->setRoles(['ROLE_USER']);
+
+            $em->persist($user);
+            $em->flush();
+
+            $this->loginUserAutomatically($user, $password);
+
+            return $this->redirectToRoute('adminPage');
+        }
+
+        return $this->render('front/register.html.twig', ['form'=>$form->createView()]);
     }
 
     /**
@@ -103,6 +129,14 @@ class FrontController extends AbstractController
 
         $cats = $this->getDoctrine()->getRepository(Category::class)->findBy(['parent'=>null], ['name'=>'ASC']);
         return $this->render('front/mainCategories.html.twig', ['cats'=>$cats]);
+    }
+
+    private function loginUserAutomatically($user, $password){
+        $token = new UsernamePasswordToken(
+            $user, $password, 'main', $user->getRoles()
+        );
+        $this->get('security.token_storage')->setToken($token);
+        $this->get('session')->set('_security_main',serialize($token));
     }
 
 }
