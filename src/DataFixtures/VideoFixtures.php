@@ -6,6 +6,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use App\Entity\Videos;
 use App\Entity\Category;
+use App\Entity\User;
 
 class VideoFixtures extends Fixture
 {
@@ -22,6 +23,28 @@ class VideoFixtures extends Fixture
             $manager->persist($video);
        }
 
+        $manager->flush();
+        $this->loadLikes($manager);
+        $this->loadDislikes($manager);
+    }
+
+    public function loadLikes($manager){
+        foreach($this->likesData() as [$video_id, $user_id]){
+            $video = $manager->getRepository(Videos::class)->find($video_id);
+            $user = $manager->getRepository(User::class)->find($user_id);
+            $video->addUsersThatLike($user);
+            $manager->persist($video);
+        }
+        $manager->flush();
+    }
+
+    public function loadDislikes($manager){
+         foreach($this->dislikesData() as [$video_id, $user_id]){
+            $video = $manager->getRepository(Videos::class)->find($video_id);
+            $user = $manager->getRepository(User::class)->find($user_id);
+            $video->addUsersThatDontLike($user);
+            $manager->persist($video);
+        }
         $manager->flush();
     }
 
@@ -55,6 +78,26 @@ class VideoFixtures extends Fixture
             ['Toys  5',289729765,5],
             ['Toys  6',289729765,7]
 
+        ];
+    }
+
+    private function dislikesData(){
+        return[
+            [7,3],
+            [14,2],
+            [21,3],
+            [13,1],
+            [17,3]
+        ];
+    }
+
+        private function likesData(){
+        return[
+            [1,1],
+            [5,2],
+            [10,3],
+            [15,2],
+            [20,2]
         ];
     }
 }
