@@ -7,6 +7,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Utils\CatTreeAdminPage;
 use App\Utils\CatTreeAdminOptionList;
 use App\Entity\Category;
+use App\Entity\User;
+use App\Entity\Videos;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\CategoryType;
 use Symfony\Component\HttpFoundation\Request;
@@ -83,7 +85,13 @@ class AdminController extends AbstractController
      */
     public function videos()
     {
-        return $this->render('admin/videos.html.twig');
+		if($this->isGranted('ROLE_ADMIN')){
+			$videos = $this->getDoctrine()->getRepository(Videos::class)->findAll();
+		}else{
+			$videos = $this->getUser()->getLikedVideos();
+		}
+		
+        return $this->render('admin/videos.html.twig',['videos'=>$videos]);
     }
 
     /**
