@@ -24,11 +24,11 @@
       </tr>
     </thead>
     <tbody>
-        {% for i in 1..7 %}
+        {% for video in videos %}
       <tr>
-        <td>{{i}}</td>
-        <td>Video name</td>
-        <td><a target="_blank" href="http://vimeo.com">go to video</a></td>
+        <td>{{loop.index}}</td>
+        <td>{{video.title}}</td>
+        <td><a target="_blank" href="{{path('videoDetails',{'video':video.id})}}">go to video</a></td>
 
         {% if is_granted('ROLE_ADMIN') %}
         <td>

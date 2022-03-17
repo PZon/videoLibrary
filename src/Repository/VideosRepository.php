@@ -60,7 +60,7 @@ class VideosRepository extends ServiceEntityRepository
             $queryBuilder->orWhere('v.title LIKE :t_'.$key)->setParameter('t_'.$key, '%'.trim($term).'%');
         }
 		
-		if(sort_method != 'rating'){
+		if($sort_method != 'rating'){
 			$dbquery=$queryBuilder
 			->orderBy('v.title', $sort_method)
 			->leftJoin('v.comments','c')
@@ -82,7 +82,10 @@ class VideosRepository extends ServiceEntityRepository
     }
 
     private function prepareQuery(string $query):array{
-        return explode(' ', $query);
+			$term = array_unique(explode(' ', $query));
+			return array_filter($term, function($term){
+				return 3 <=mb_strlen($term);
+			});
     }
 
     public function videoDetails($id){
