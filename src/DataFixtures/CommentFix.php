@@ -12,9 +12,9 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 class CommentFix extends Fixture implements DependentFixtureInterface
 {
-    public function load(ObjectManager $manager)
+   public function load(ObjectManager $manager)
     {
-       foreach($this->commentData() as [$content, $user, $video, $created_at]){
+      /* foreach($this->commentData() as [$content, $user, $video, $created_at]){
         $comment = new Comment;
         $user = $manager->getRepository(User::class)->find($user);
         $video= $manager->getRepository(Videos::class)->find($video);
@@ -27,10 +27,10 @@ class CommentFix extends Fixture implements DependentFixtureInterface
         $manager->persist($comment);
        }
 
-        $manager->flush();
+        $manager->flush();*/
     }
 
-    private function commentData(){
+  /*  private function commentData(){
         return[
             ['Lorem ipsum dupsum', 1, 3, '1977-01-01 13:13:13'],
             [' Lorem ipsum dupsum', 2, 7, '1977-01-01 13:13:13'],
@@ -41,11 +41,11 @@ class CommentFix extends Fixture implements DependentFixtureInterface
             [' Lorem ipsum dupsum', 1, 13, '1977-01-01 13:13:13']
         ];
 
-    }
+    }*/
 
     public function getDependencies(){
-        return array(
+      /*  return array(
             UserFix::class
-       );
+       );*/
     }
 }
