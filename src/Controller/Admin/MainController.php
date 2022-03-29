@@ -24,7 +24,9 @@ class MainController extends AbstractController{
      */
     public function index()
     {
-        return $this->render('admin/my_profile.html.twig');
+        return $this->render('admin/my_profile.html.twig', [
+			'subscription'=>$this->getUser()->getSubscription()
+		]);
     }
 	
 	public function getAllCategories(CatTreeAdminOptionList $cats, $editedCat = null){
@@ -46,5 +48,24 @@ class MainController extends AbstractController{
 		
         return $this->render('admin/videos.html.twig',['videos'=>$videos]);
     }
-	
+
+    
+	/**
+     * @Route("/cancel-plan", name="cancel_plan")
+     */
+    public function cancelPlan(){
+        $user = $this->getDoctrine()->getRepository(User::class)->find($this->getUser());
+        $subscription = $user->getSubscription();
+        $subscription->setValidTo(new \Datetime());
+        $subscription->setPaymentStatus(null);
+        //$user->setSubscription(null);
+        $subscription->setPlan('canceled');
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->persist($subscription);
+        $em->flush();
+
+        return $this->redirectToRoute('adminPage');
+    }
 }
