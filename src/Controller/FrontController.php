@@ -79,16 +79,6 @@ class FrontController extends AbstractController
 																]);
     }
 
-  
-
-    /**
-     * @Route("/payment", name="payment")
-     */
-    public function payment()
-    {
-        return $this->render('front/payment.html.twig');
-    }
-
     public function mainCategories(){
 
         $cats = $this->getDoctrine()->getRepository(Category::class)->findBy(['parent'=>null], ['name'=>'ASC']);
