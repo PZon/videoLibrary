@@ -11,15 +11,23 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 use App\Entity\User;
+use App\Entity\Subscription;
 use App\Form\UserType;
 
 
 class SecurityController extends AbstractController{
 	/**
-     * @Route("/register", name="register")
+     * @Route("/register/{plan}", name="register", defaults={"plan": null})
      */
-    public function register(Request $request, UserPasswordEncoderInterface $password_encoder)
-    {
+    public function register(Request $request, UserPasswordEncoderInterface $password_encoder, SessionInterface $session, $plan){
+        
+        if( $request->isMethod('GET')  ) 
+        {
+            $session->set('planName',$plan);    
+            $session->set('planPrice', Subscription::getPlanDataPriceByName($plan));    
+        }        
+
+        
         $user = new User;
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -40,6 +48,12 @@ class SecurityController extends AbstractController{
             $this->loginUserAutomatically($user, $password);
 
             return $this->redirectToRoute('adminPage');
+        }
+
+        if($this->isGranted('IS_AUTHENTICATED_REMEMBERED') && $plan == Subscription::getPlanNameByIndex(0)){
+            return $this->redirectToRoute('adminPage');
+        }elseif($this->isGranted('IS_AUTHENTICATED_REMEMBERED')){
+            return $this->redirectToRoute('payment');
         }
 
         return $this->render('front/register.html.twig', ['form'=>$form->createView()]);
@@ -68,6 +82,14 @@ class SecurityController extends AbstractController{
         );
         $this->get('security.token_storage')->setToken($token);
         $this->get('session')->set('_security_main',serialize($token));
+    }
+
+    /**
+     * @Route("/payment", name="payment")
+     */
+    public function payment()
+    {
+        return $this->render('front/payment.html.twig');
     }
 }
   
