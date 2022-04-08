@@ -13,9 +13,13 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use App\Entity\User;
 use App\Entity\Subscription;
 use App\Form\UserType;
+use App\Controller\Traits\SaveSubscription;
 
 
 class SecurityController extends AbstractController{
+
+    use SaveSubscription;
+
 	/**
      * @Route("/register/{plan}", name="register", defaults={"plan": null})
      */
@@ -42,6 +46,18 @@ class SecurityController extends AbstractController{
             $user->setPassword($password);
             $user->setRoles(['ROLE_USER']);
 
+            $date = new \Datetime();
+            $date->modify('+1 month');
+            $subscription = new Subscription();
+            $subscription->setValidTo($date);
+            $subscription->setPlan($session->get('planName'));
+            $subscription->setFreePlanUsed(false);
+            if($plan == Subscription::getPlanNameByIndex(0)){
+                $subscription->setFreePlanUsed(true);
+                $subscription->setPaymentStatus('paid');
+            }
+            $user->setSubscription($subscription);
+
             $em->persist($user);
             $em->flush();
 
@@ -51,6 +67,7 @@ class SecurityController extends AbstractController{
         }
 
         if($this->isGranted('IS_AUTHENTICATED_REMEMBERED') && $plan == Subscription::getPlanNameByIndex(0)){
+            $this->saveSubscription($plan, $this->getUser());
             return $this->redirectToRoute('adminPage');
         }elseif($this->isGranted('IS_AUTHENTICATED_REMEMBERED')){
             return $this->redirectToRoute('payment');
