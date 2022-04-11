@@ -7,11 +7,12 @@ use App\Utils\CatTreeAdminOptionList;
 use App\Entity\Category;
 use App\Entity\User;
 use App\Entity\Videos;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Form\UserType;
 use App\Form\CategoryType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @Route("/admin")
@@ -22,10 +23,21 @@ class MainController extends AbstractController{
 	/**
      * @Route("/", name="adminPage")
      */
-    public function index()
+    public function index(Request $request)
     {
+        $user = $this->getUser();
+        $form=$this->createForm(UserType::class, $user, ['user'=>$user]);
+        //$form=$this->createForm(UserType::class);
+        $form->handleRequest($request);
+        $is_invalid = null;
+        if($form->isSubmitted() && $form->isValid()){
+            exit('valid');
+        }
+
         return $this->render('admin/my_profile.html.twig', [
-			'subscription'=>$this->getUser()->getSubscription()
+			'subscription'=>$this->getUser()->getSubscription(),
+            'form'=>$form->createView(),
+            'is_invalid'=> $is_invalid
 		]);
     }
 	
