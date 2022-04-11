@@ -2,7 +2,7 @@
 
 {% block mainAdmin %}
 
-<h2>My profile <small><a onclick="return confirm('Are you sure?');" href="#">delete account</a></small></h2>
+<h2>My profile <small><a onclick="return confirm('Are you sure?');" href="{{path('deleteAccount')}}">delete account</a></small></h2>
 
 {% if not is_granted('ROLE_ADMIN') and subscription and subscription.getPlan in subscription.getPlanDataNames %}
  <p class="text-left">Your plan - {{subscription.getPlan|upper}}.<br> <b> valid to:</b> {{subscription.validTo|date('Y-m-d')}}
