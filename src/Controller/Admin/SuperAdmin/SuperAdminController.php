@@ -32,6 +32,20 @@ class SuperAdminController extends AbstractController{
      */
 	public function users()
     {
-        return $this->render('admin/users.html.twig');
+        
+        $rep =$this->getDoctrine()->getRepository(User::class);
+        $users = $rep->findBy([],['name'=>'ASC']);
+        return $this->render('admin/users.html.twig', ['users'=>$users]);
+    }
+
+    /**
+     * @Route("/deleteUser/{user}", name="deleteUser")
+     */
+    public function deleteUser(User $user)
+    {
+       $manager = $this->getDoctrine()->getManager();
+       $manager->remove($user);
+       $manager->flush();
+        return $this->redirectToRoute('users');
     }
 }
