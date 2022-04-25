@@ -7,11 +7,14 @@ use App\Utils\CatTreeAdminOptionList;
 use App\Entity\Category;
 use App\Entity\User;
 use App\Entity\Videos;
+use App\Form\VideoType;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\CategoryType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Utils\Interfaces\UploaderInterface;
+
 
     /**
      * @Route("/admin/su")
@@ -20,11 +23,40 @@ use Symfony\Component\Routing\Annotation\Route;
 class SuperAdminController extends AbstractController{
 
 	/**
-     * @Route("/su/uploadVideo", name="uploadVideo")
+     * @Route("/su/uploadVideo_Old", name="uploadVideo_Old_PZ")
      */
     public function uploadVideo()
     {
         return $this->render('admin/upload_video.html.twig');
+    }
+
+        /**
+     * @Route("/uploadVideoLocally", name="uploadVideoLocally")
+     */
+    public function uploadVideoLocally(Request $request, UploaderInterface $fileUploader)
+    {
+        $video = new Videos();
+        $form = $this->createForm(VideoType::class, $video);
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) { 
+            $em =$this->getDoctrine()->getManager();
+            $file = $video->getUploadedVideo();
+            $fileName = $fileUploader->upload($file);
+
+            $base_path = Videos::uploadFolder;
+            $video->setPath($base_path.$fileName[0]);
+            $video->setTitle($fileName[1]);
+
+            $em->persist($video);
+            $em->flush();
+
+            return $this->redirectToRoute('videos');
+        }
+
+        return $this->render('admin/uploadVideoLocally.html.twig',[
+            'form'=>$form->createView()
+        ]);
     }
 	
 	/**
