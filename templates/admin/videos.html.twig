@@ -43,7 +43,7 @@
                 </select>
             </form>
         </td>
-        <td><a href="#" onclick="delete_video(event,2);"><i class="fas fa-trash"></i></a></td>
+        <td><a href="{{path('deleteVideo', {'video':video.id, 'path':video.vimeoId})}}" onclick="deleteVideo(event);"><i class="fas fa-trash"></i></a></td>
         {% endif %}
       </tr>
         {% endfor %}
@@ -55,7 +55,7 @@
 {% block customjs %}
 {{parent()}}
     <script>
-        function delete_video(e,video_id)
+      /*  function delete_video(e,video_id)
         {
             e.preventDefault();
             if(confirm('Are you sure?')) 
@@ -64,6 +64,9 @@
                 // delete video from vimeo
                 // window.location.href = 'clear database record with Symfony';
             }
+        }*/
+        function deleteVideo(e){
+            confirm('Are you sure ?');
         }
     </script>
 

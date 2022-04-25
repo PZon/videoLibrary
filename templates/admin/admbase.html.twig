@@ -67,6 +67,14 @@
                     <h1 class="h2"><a href="{{path('adminPage')}}">Dashboard</a></h1>
                 </div>
 
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{label}}" role="alert">
+                        {{message}}
+                    </div>
+                {% endfor%}
+            {% endfor %}
+
 			{% block mainAdmin %}	{% endblock %}
 
             </main>
