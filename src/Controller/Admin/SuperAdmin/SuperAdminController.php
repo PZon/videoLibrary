@@ -80,4 +80,28 @@ class SuperAdminController extends AbstractController{
        $manager->flush();
         return $this->redirectToRoute('users');
     }
+
+    /**
+     * @Route("/deleteVideo/{video}/{path}", name="deleteVideo", requirements={"path"=".+"})
+     */
+    public function deleteVideo(Videos $video, $path, UploaderInterface $fileUploader)
+    {
+       $manager = $this->getDoctrine()->getManager();
+       $manager->remove($video);
+       $manager->flush();
+
+       if($fileUploader->delete($path)){
+        $this->addFlash(
+            'success',
+            'Video has been deleted'
+        );
+       }else{
+        addFlash(
+         'danger',
+         'ERROR: Video is not deleted ?'
+        );
+       }
+
+        return $this->redirectToRoute('videos');
+    }
 }
