@@ -59,24 +59,24 @@ class MainController extends AbstractController{
 		]);
     }
 	
-	public function getAllCategories(CatTreeAdminOptionList $cats, $editedCat = null){
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-        $cats->getCategoryList($cats->buidTree());
-        return $this->render('admin/allCategories.html.twig', ['cats'=>$cats, 'editedCat'=>$editedCat]);
-    }
 	
 	/**
      * @Route("/videos", name="videos")
      */
-    public function videos()
+    public function videos(CatTreeAdminOptionList $cats)
     {
 		if($this->isGranted('ROLE_ADMIN')){
-			$videos = $this->getDoctrine()->getRepository(Videos::class)->findAll();
+			//$videos = $this->getDoctrine()->getRepository(Videos::class)->findAll();
+            $cats->getCategoryList($cats->buidTree());
+            $videos = $this->getDoctrine()->getRepository(Videos::class)->findBy([],['title'=>'ASC']);
 		}else{
+            $cats = null;
 			$videos = $this->getUser()->getLikedVideos();
 		}
 		
-        return $this->render('admin/videos.html.twig',['videos'=>$videos]);
+        return $this->render('admin/videos.html.twig',[
+                            'videos'=>$videos,
+                            'cats'=>$cats ]);
     }
 
     
