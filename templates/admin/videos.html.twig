@@ -32,14 +32,21 @@
 
         {% if is_granted('ROLE_ADMIN') %}
         <td>
-            <form action="#" method="POST">
-                <select onchange="this.form.submit();">
-                <option selected>Parent...</option>
-                <option value="1">Funny</option>
-                <option value="1">--For kids</option>
-                <option value="1">----For adults</option>
-                <option value="2">Scary</option>
-                <option value="3">Motivating</option>
+            <form action="{{path('updateVideoCat',{'video':video.id})}}" method="POST">
+                <select name="videoCategory" onchange="this.form.submit();">
+                    {% for cat in cats.catList %}
+                     {% if video.category is not null and video.category.id==cat.id %}
+                        <option selected value="{{cat.id}}">{{cat.name}}</option>
+                     {% else %}
+                        <option value="{{cat.id}}">{{cat.name}}</option>
+                     {% endif %}
+                    }
+                    {% endfor %}
+
+                     {% if video.category is null %}
+                        <option selected value="0">No category</option>
+                     {% endif %}
+                    }
                 </select>
             </form>
         </td>

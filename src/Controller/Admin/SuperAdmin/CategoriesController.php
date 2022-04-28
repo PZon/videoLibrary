@@ -96,5 +96,11 @@ class CategoriesController extends AbstractController{
                                                             'form'=>$form->createView(),
                                                             'isInvalid'=>$isInvalid]);
     }
+
+    public function getAllCategories(CatTreeAdminOptionList $cats, $editedCat = null){
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $cats->getCategoryList($cats->buidTree());
+        return $this->render('admin/allCategories.html.twig', ['cats'=>$cats, 'editedCat'=>$editedCat]);
+    }    
 	
 }
