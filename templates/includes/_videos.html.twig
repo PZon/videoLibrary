@@ -3,9 +3,9 @@
                {% for video in videos %}
 			   
 			   {% if videoNoMembers is not null %}
-				{% set videoid = 'https://player.vimeo.com/video/' ~ videoNoMembers %}
+                {% set videoid = videoNoMember %}
 			   {% else %}
-				{% set videoid = video.vimeoid %}
+				{% set videoid = video.path %}
 			   {% endif %}
 			   
 			   
