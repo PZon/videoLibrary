@@ -1,3 +1,4 @@
 twig:
     globals:
-        upload_route_name: "uploadVideoLocally"
+        #upload_route_name: "uploadVideoLocally"
+        upload_route_name: "upload_video_by_vimeo"
