@@ -3,7 +3,7 @@
                {% for video in videos %}
 			   
 			   {% if videoNoMembers is not null %}
-                {% set videoid = videoNoMember %}
+                {% set videoid = videoNoMembers %}
 			   {% else %}
 				{% set videoid = video.path %}
 			   {% endif %}
