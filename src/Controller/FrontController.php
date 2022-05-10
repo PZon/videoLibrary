@@ -16,6 +16,7 @@ use App\Utils\VideoForNoValidSubscription;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class FrontController extends AbstractController
 {
@@ -105,6 +106,21 @@ class FrontController extends AbstractController
         }
 
         return $this->redirectToRoute('videoDetails',['video'=>$video->getId()]);
+    }
+
+      /**
+    * @Route("/delete-comment/{comment}", name="delete_comment")
+    * @Security("user.getId() == comment.getUser().getId()")
+    */
+    public function deleteComment(Comment $comment, Request $request)
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($comment);
+        $em->flush();
+
+        return $this->redirect($request->headers->get('referer'));
     }
 
     /**
