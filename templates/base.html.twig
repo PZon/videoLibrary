@@ -40,7 +40,7 @@
                 {{render(controller("App\\Controller\\FrontController::mainCategories"))}}
 
                 {% if app.user %}
-                 <a class="p-2 text-dark" href="{{path('adminPage')}}">My account</a>
+                 <a class="p-2 text-dark" href="{{path('adminPage')}}">{% trans %}My account{% endtrans %}</a>
                 {% endif %}
             </nav>
             {% if not app.user %}
