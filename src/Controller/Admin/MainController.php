@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * @Route("/admin")
@@ -24,7 +25,7 @@ class MainController extends AbstractController{
 	/**
      * @Route("/", name="adminPage")
      */
-    public function index(Request $request, UserPasswordEncoderInterface $password_encoder)
+    public function index(Request $request, UserPasswordEncoderInterface $password_encoder, TranslatorInterface $translate)
     {
         $user = $this->getUser();
         $form=$this->createForm(UserType::class, $user, ['user'=>$user]);
@@ -43,9 +44,12 @@ class MainController extends AbstractController{
             $em->persist($user);
             $em->flush();
 
+            //$translated = $translate->trans('your changes were saved');
+
             $this->addFlash(
                 'success',
-                'Your changes were saved'
+                'your changes were saved'
+                //$translated - również działa
             );
             return $this->redirectToRoute('adminPage');
         }elseif($request->isMethod('post')){
