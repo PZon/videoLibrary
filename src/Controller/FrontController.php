@@ -17,6 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use App\Utils\Interfaces\CacheInterface;
 
 class FrontController extends AbstractController
 {
@@ -33,19 +34,38 @@ class FrontController extends AbstractController
      * @Route("/videoList/cat/{catName},{id}/{page}", defaults={"page":"1"}, name="videoList")
      */
     //public function videoList($id, $page ,CatTreeFrontPage $cats, Request $request)
-    public function videoList($id, $page ,CatTreeFrontPage $cats, Request $request, VideoForNoValidSubscription $videoNoMembers)
+    public function videoList($id, $page ,CatTreeFrontPage $cats, Request $request, VideoForNoValidSubscription $videoNoMembers, CacheInterface $cache)
     {
         $cats->getCategoryListAndParent($id);
         // dump($cats); //composer require symfony/var-dumper --dev
-        $ids = $cats->getChildIds($id);
-        array_push($ids, $id);
 
-        $videos = $this->getDoctrine()->getRepository(Videos::class)->findByChildIds($ids, $page, $request->get('sortby'));
-        return $this->render('front/videolist.html.twig', ['subCats'=>$cats,
-		'videos'=>$videos,
-		'videoNoMembers'=>$videoNoMembers->check()
-		]);
+
+        $cache = $cache->cache; 
+        $videoList = $cache->getItem('videoList'.$id.$page.$request->get('sortby'));
+        // $videoList->tag(['videoList']);
+        $videoList->expiresAfter(60);
+
+        if(!$videoList->isHit()){
+            $ids = $cats->getChildIds($id);
+            array_push($ids, $id);
+
+            $videos = $this->getDoctrine()->getRepository(Videos::class)->findByChildIds($ids, $page, $request->get('sortby'));
+
+           /* return $this->render('front/videolist.html.twig', ['subCats'=>$cats,
+    		'videos'=>$videos,
+    		'videoNoMembers'=>$videoNoMembers->check()
+    		]);*/
+            $cats->getCategoryListAndParent($id);
+            $response = $this->render('front/videolist.html.twig', ['subCats'=>$cats,
+            'videos'=>$videos,
+            'videoNoMembers'=>$videoNoMembers->check()
+            ]);
+            $videoList->set($response);
+            $cache->save($videoList);
+        }
+        return $videoList->get();
     }
+
 
     /**
      * @Route("/videoDetails/{video}", name="videoDetails")
