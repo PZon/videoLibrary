@@ -6,6 +6,9 @@ use App\Utils\Interfaces\CacheInterface;
 use Symfony\Component\Cache\Adapter\FileSystemAdapter; 
 use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 
+
+
+
 class FilesCache implements CacheInterface{
 	public $cache;
 
